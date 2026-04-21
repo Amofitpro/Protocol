@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMOFIT – Protocolos Inteligentes</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --black:#080A0F;
+    --deep:#0D1117;
+    --card:#12181F;
+    --border:#1E2D3D;
+    --accent:#00E5A0;
+    --accent2:#00BFFF;
+    --text:#E8EDF2;
+    --muted:#6B7F8E;
+    --bebas:'Bebas Neue',sans-serif;
+    --body:'DM Sans',sans-serif;
+  }
+  html{scroll-behavior:smooth}
+  body{background:var(--black);color:var(--text);font-family:var(--body);overflow-x:hidden}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;background:rgba(8,10,15,0.85);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,229,160,0.1)}
+  .logo{font-family:var(--bebas);font-size:1.8rem;letter-spacing:0.15em;color:var(--accent);text-decoration:none}
+  .logo span{color:var(--text);opacity:0.6;font-size:0.9rem;letter-spacing:0.05em;display:block;margin-top:-6px;font-family:var(--body);font-weight:300}
+  nav ul{list-style:none;display:flex;gap:2rem}
+  nav a{color:var(--muted);text-decoration:none;font-size:0.85rem;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;transition:color 0.2s}
+  nav a:hover{color:var(--accent)}
+  .nav-cta{background:var(--accent);color:var(--black)!important;padding:0.5rem 1.25rem;border-radius:4px;font-weight:600!important}
+  .nav-cta:hover{background:#00c98a!important;color:var(--black)!important}
+
+  /* HERO */
+  .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:6rem 2rem 4rem}
+  .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 60%, rgba(0,229,160,0.07) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 80% 20%, rgba(0,191,255,0.05) 0%, transparent 60%)}
+  .grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(0,229,160,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,160,0.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center, black 30%, transparent 80%)}
+  .hero-inner{position:relative;text-align:center;max-width:860px}
+  .hero-badge{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.25);color:var(--accent);font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:0.4rem 1rem;border-radius:100px;margin-bottom:1.5rem}
+  .hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.4)}}
+  h1{font-family:var(--bebas);font-size:clamp(3.5rem,9vw,7rem);line-height:0.95;letter-spacing:0.02em;margin-bottom:1.5rem}
+  h1 .line1{display:block;color:var(--text)}
+  h1 .line2{display:block;color:var(--accent);text-shadow:0 0 60px rgba(0,229,160,0.3)}
+  h1 .line3{display:block;color:var(--text);opacity:0.7}
+  .hero-sub{font-size:1.1rem;color:var(--muted);max-width:520px;margin:0 auto 2.5rem;line-height:1.7;font-weight:300}
+  .hero-sub strong{color:var(--text);font-weight:500}
+  .hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3.5rem}
+  .btn-primary{background:var(--accent);color:var(--black);padding:0.9rem 2rem;border-radius:4px;font-weight:700;font-size:0.95rem;text-decoration:none;letter-spacing:0.05em;transition:all 0.2s;cursor:pointer;border:none;text-transform:uppercase}
+  .btn-primary:hover{background:#00c98a;transform:translateY(-2px)}
+  .btn-secondary{background:transparent;color:var(--text);padding:0.9rem 2rem;border-radius:4px;font-weight:500;font-size:0.95rem;text-decoration:none;border:1px solid var(--border);letter-spacing:0.05em;transition:all 0.2s;cursor:pointer;text-transform:uppercase}
+  .btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
+  .hero-stats{display:flex;gap:2.5rem;justify-content:center;flex-wrap:wrap}
+  .stat{text-align:center}
+  .stat-num{font-family:var(--bebas);font-size:2.4rem;letter-spacing:0.05em;color:var(--accent)}
+  .stat-label{font-size:0.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:-4px}
+
+  /* SECTION */
+  section{padding:5rem 2rem}
+  .container{max-width:1100px;margin:0 auto}
+  .section-tag{font-size:0.7rem;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem}
+  .section-title{font-family:var(--bebas);font-size:clamp(2rem,5vw,3.5rem);letter-spacing:0.03em;line-height:1;margin-bottom:1rem}
+  .section-sub{color:var(--muted);max-width:500px;line-height:1.7;font-size:0.95rem;font-weight:300}
+
+  /* HOW IT WORKS */
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;margin-top:3rem}
+  .step{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.75rem;position:relative;overflow:hidden;transition:border-color 0.3s}
+  .step:hover{border-color:rgba(0,229,160,0.3)}
+  .step-num{font-family:var(--bebas);font-size:4rem;color:rgba(0,229,160,0.08);position:absolute;top:-8px;right:12px;letter-spacing:0;line-height:1}
+  .step-icon{width:40px;height:40px;background:rgba(0,229,160,0.1);border-radius:6px;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;font-size:1.2rem}
+  .step h3{font-size:1rem;font-weight:600;margin-bottom:0.5rem;color:var(--text)}
+  .step p{font-size:0.85rem;color:var(--muted);line-height:1.6}
+
+  /* FEATURES */
+  .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.5rem;margin-top:3rem}
+  .feature{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.75rem;transition:all 0.3s}
+  .feature:hover{border-color:rgba(0,229,160,0.3);transform:translateY(-4px)}
+  .feature-icon{font-size:1.6rem;margin-bottom:1rem}
+  .feature h3{font-size:1rem;font-weight:600;margin-bottom:0.5rem}
+  .feature p{font-size:0.85rem;color:var(--muted);line-height:1.6}
+  .feature-tag{display:inline-block;font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);background:rgba(0,229,160,0.1);padding:2px 8px;border-radius:3px;margin-bottom:0.75rem}
+
+  /* PRICING */
+  .pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:3rem;align-items:start}
+  .plan{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:2rem;transition:all 0.3s;position:relative}
+  .plan:hover{transform:translateY(-4px)}
+  .plan.featured{border-color:var(--accent);background:linear-gradient(160deg,rgba(0,229,160,0.07) 0%,var(--card) 60%)}
+  .plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--black);font-size:0.65rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;padding:4px 14px;border-radius:100px}
+  .plan-name{font-family:var(--bebas);font-size:1.6rem;letter-spacing:0.08em;color:var(--text);margin-bottom:0.25rem}
+  .plan-desc{font-size:0.8rem;color:var(--muted);margin-bottom:1.5rem;font-weight:300}
+  .plan-price{margin-bottom:1.5rem}
+  .price-val{font-family:var(--bebas);font-size:3.2rem;letter-spacing:0;color:var(--text);line-height:1}
+  .price-val sup{font-size:1.2rem;vertical-align:super;font-family:var(--body);font-weight:600}
+  .price-period{font-size:0.8rem;color:var(--muted);display:block;margin-top:2px}
+  .plan-divider{border:none;border-top:1px solid var(--border);margin:1.25rem 0}
+  .plan-features{list-style:none;display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.75rem}
+  .plan-features li{font-size:0.85rem;color:var(--muted);display:flex;align-items:center;gap:0.5rem}
+  .plan-features li::before{content:'✓';color:var(--accent);font-weight:700;font-size:0.8rem;flex-shrink:0}
+  .plan-features li.no::before{content:'✕';color:var(--border);color:#3a4a5a}
+  .plan-features li.no{opacity:0.5}
+  .plan-btn{width:100%;padding:0.85rem;border-radius:5px;font-weight:700;font-size:0.9rem;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;border:none;transition:all 0.2s}
+  .plan-btn.primary{background:var(--accent);color:var(--black)}
+  .plan-btn.primary:hover{background:#00c98a}
+  .plan-btn.outline{background:transparent;color:var(--text);border:1px solid var(--border)}
+  .plan-btn.outline:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* TESTIMONIALS */
+  .testimonials{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;margin-top:3rem}
+  .testi{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.5rem}
+  .testi-stars{color:#FFD700;font-size:0.9rem;margin-bottom:0.75rem;letter-spacing:2px}
+  .testi-text{font-size:0.9rem;color:var(--text);line-height:1.6;margin-bottom:1rem;font-weight:300;font-style:italic}
+  .testi-author{display:flex;align-items:center;gap:0.75rem}
+  .testi-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,rgba(0,229,160,0.3),rgba(0,191,255,0.3));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;color:var(--accent);flex-shrink:0}
+  .testi-name{font-size:0.85rem;font-weight:600}
+  .testi-meta{font-size:0.75rem;color:var(--muted)}
+
+  /* CTA BAND */
+  .cta-band{background:linear-gradient(135deg,rgba(0,229,160,0.12) 0%,rgba(0,191,255,0.06) 100%);border-top:1px solid rgba(0,229,160,0.15);border-bottom:1px solid rgba(0,229,160,0.15);padding:5rem 2rem;text-align:center}
+  .cta-band h2{font-family:var(--bebas);font-size:clamp(2.5rem,6vw,4.5rem);letter-spacing:0.03em;margin-bottom:1rem}
+  .cta-band p{color:var(--muted);max-width:450px;margin:0 auto 2rem;line-height:1.6;font-size:0.95rem}
+
+  /* FAQ */
+  .faq-list{max-width:700px;margin:3rem auto 0;display:flex;flex-direction:column;gap:1px}
+  .faq-item{border-bottom:1px solid var(--border);overflow:hidden}
+  .faq-q{width:100%;background:none;border:none;color:var(--text);text-align:left;padding:1.1rem 0;font-size:0.95rem;font-weight:500;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:var(--body)}
+  .faq-q:hover{color:var(--accent)}
+  .faq-arrow{font-size:1rem;color:var(--muted);transition:transform 0.3s;flex-shrink:0}
+  .faq-a{font-size:0.88rem;color:var(--muted);line-height:1.7;padding-bottom:1rem;display:none}
+  .faq-item.open .faq-a{display:block}
+  .faq-item.open .faq-arrow{transform:rotate(180deg)}
+
+  /* FOOTER */
+  footer{padding:3rem 2rem;border-top:1px solid var(--border);text-align:center}
+  .footer-logo{font-family:var(--bebas);font-size:1.6rem;letter-spacing:0.15em;color:var(--accent);margin-bottom:0.5rem}
+  footer p{font-size:0.8rem;color:var(--muted)}
+
+  /* DIVIDER */
+  .section-divider{border:none;border-top:1px solid var(--border);margin:0}
+
+  /* SCROLL ANIMATIONS */
+  .fade-in{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease}
+  .fade-in.visible{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">AMOFIT<span>Protocolos Inteligentes</span></a>
+  <ul>
+    <li><a href="#como-funciona">Como funciona</a></li>
+    <li><a href="#recursos">Recursos</a></li>
+    <li><a href="#planos">Planos</a></li>
+    <li><a href="#planos" class="nav-cta">Começar agora</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-lines"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">⚡ IA treinada para o seu corpo</div>
+    <h1>
+      <span class="line1">TRANSFORME SEU</span>
+      <span class="line2">CORPO</span>
+      <span class="line3">COM PROTOCOLOS INTELIGENTES</span>
+    </h1>
+    <p class="hero-sub">Treinos e planos nutricionais gerados por <strong>inteligência artificial</strong>, personalizados para seus objetivos, nível de experiência e rotina.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="document.getElementById('planos').scrollIntoView({behavior:'smooth'})">Quero meu protocolo →</button>
+      <button class="btn-secondary" onclick="document.getElementById('como-funciona').scrollIntoView({behavior:'smooth'})">Ver como funciona</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">4.800+</div><div class="stat-label">Protocolos gerados</div></div>
+      <div class="stat"><div class="stat-num">97%</div><div class="stat-label">Taxa de satisfação</div></div>
+      <div class="stat"><div class="stat-num">21 dias</div><div class="stat-label">Para ver resultados</div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- COMO FUNCIONA -->
+<section id="como-funciona">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-tag">Como funciona</div>
+      <h2 class="section-title">Do zero ao protocolo<br>em minutos</h2>
+      <p class="section-sub">Nossa IA analisa seu perfil e cria um plano completo de treino e nutrição personalizado para você.</p>
+    </div>
+    <div class="steps fade-in">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-icon">📋</div>
+        <h3>Preencha seu perfil</h3>
+        <p>Informe seus objetivos, nível de experiência, restrições alimentares, disponibilidade de treino e histórico físico.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-icon">🤖</div>
+        <h3>A IA processa tudo</h3>
+        <p>Nossos algoritmos analisam mais de 200 variáveis para criar o protocolo ideal para o seu corpo e rotina.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-icon">📱</div>
+        <h3>Receba seu protocolo</h3>
+        <p>Treino semanal completo + plano nutricional detalhado com macros, receitas e sugestões de suplementos.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-icon">🔄</div>
+        <h3>Evolua e atualize</h3>
+        <p>A IA reajusta seu protocolo a cada ciclo com base no seu progresso, garantindo evolução contínua.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- RECURSOS -->
+<section id="recursos">
+  <div class="container">
+    <div class="fade-in">
+      <div class="section-tag">Recursos</div>
+      <h2 class="section-title">Tudo que você precisa<br>para evoluir</h2>
+      <p class="section-sub">Mais do que um app de treino. Uma plataforma completa de transformação física alimentada por IA.</p>
+    </div>
+    <div class="features-grid fade-in">
+      <div class="feature">
+        <div class="feature-tag">IA</div>
+        <div class="feature-icon">🎯</div>
+        <h3>Treino 100% Personalizado</h3>
+        <p>Divisão de treino, exercícios, séries, repetições e progressão de carga gerados especificamente para você.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-tag">Nutrição</div>
+        <div class="feature-icon">🥗</div>
+        <h3>Plano Nutricional Completo</h3>
+        <p>Cálculo de macros, plano alimentar diário com opções, lista de compras e receitas fit alinhadas ao seu objetivo.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-tag">Progresso</div>
+        <div class="feature-icon">📊</div>
+        <h3>Dashboard de Evolução</h3>
+        <p>Acompanhe suas métricas, fotos de progresso, recordes pessoais e evolução de composição corporal.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-tag">Adaptativo</div>
+        <div class="feature-icon">🔃</div>
+        <h3>Ajustes Automáticos</h3>
+        <p>O protocolo se adapta automaticamente ao seu feedback, estagnação ou mudança de objetivo.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-tag">Suporte</div>
+        <div class="feature-icon">💬</div>
+        <h3>Chat com a IA AMOFIT</h3>
+        <p>Tire dúvidas sobre treino, nutrição e suplementação diretamente com nossa IA especializada 24/7.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-tag">Conteúdo</div>
+        <div class="feature-icon">🎬</div>
+        <h3>Biblioteca de Exercícios</h3>
+        <p>Mais de 500 exercícios com vídeos demonstrativos, variações e guias de execução correta.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- PLANOS -->
+<section id="planos">
+  <div class="container">
+    <div class="fade-in" style="text-align:center">
+      <div class="section-tag">Planos e Preços</div>
+      <h2 class="section-title">Escolha seu protocolo</h2>
+      <p class="section-sub" style="margin:0 auto">Sem taxas ocultas. Cancele quando quiser. Resultado garantido em 21 dias ou seu dinheiro de volta.</p>
+    </div>
+    <div class="pricing-grid fade-in">
+
+      <!-- FREE -->
+      <div class="plan">
+        <div class="plan-name">Starter</div>
+        <div class="plan-desc">Para quem quer experimentar</div>
+        <div class="plan-price">
+          <div class="price-val">Grátis</div>
+          <span class="price-period">para sempre</span>
+        </div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li>1 protocolo de treino (IA)</li>
+          <li>Plano nutricional básico</li>
+          <li>Dashboard de progresso</li>
+          <li class="no">Atualizações automáticas</li>
+          <li class="no">Chat com IA ilimitado</li>
+          <li class="no">Protocolo de suplementação</li>
+        </ul>
+        <button class="plan-btn outline" onclick="sendPrompt('Quero criar uma conta gratuita no AMOFIT')">Criar conta grátis</button>
+      </div>
+
+      <!-- PRO (FEATURED) -->
+      <div class="plan featured">
+        <div class="plan-badge">Mais popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-desc">Para resultados reais e contínuos</div>
+        <div class="plan-price">
+          <div class="price-val"><sup>R$</sup>49</div>
+          <span class="price-period">/mês · R$ 39/mês no anual</span>
+        </div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li>Protocolos ilimitados (IA)</li>
+          <li>Nutrição completa com macros</li>
+          <li>Atualizações automáticas</li>
+          <li>Chat com IA ilimitado</li>
+          <li>Dashboard avançado</li>
+          <li class="no">Protocolo de suplementação</li>
+        </ul>
+        <button class="plan-btn primary" onclick="sendPrompt('Quero assinar o plano Pro do AMOFIT por R$49/mês')">Começar 7 dias grátis →</button>
+      </div>
+
+      <!-- ELITE -->
+      <div class="plan">
+        <div class="plan-name">Elite</div>
+        <div class="plan-desc">Para atletas e resultados máximos</div>
+        <div class="plan-price">
+          <div class="price-val"><sup>R$</sup>89</div>
+          <span class="price-period">/mês · R$ 69/mês no anual</span>
+        </div>
+        <hr class="plan-divider">
+        <ul class="plan-features">
+          <li>Tudo do plano Pro</li>
+          <li>Protocolo de suplementação IA</li>
+          <li>Análise de bioimpedância</li>
+          <li>Consultoria mensal (vídeo)</li>
+          <li>Acesso prioritário a novidades</li>
+          <li>Comunidade VIP exclusiva</li>
+        </ul>
+        <button class="plan-btn outline" onclick="sendPrompt('Quero assinar o plano Elite do AMOFIT por R$89/mês')">Assinar Elite →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="container">
+    <div class="fade-in" style="text-align:center">
+      <div class="section-tag">Depoimentos</div>
+      <h2 class="section-title">Quem já transformou</h2>
+    </div>
+    <div class="testimonials fade-in">
+      <div class="testi">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Perdi 8kg em 2 meses seguindo o protocolo da IA. Nunca imaginei que seria tão personalizado e fácil de seguir."</p>
+        <div class="testi-author"><div class="testi-avatar">MC</div><div><div class="testi-name">Mariana C.</div><div class="testi-meta">Plano Pro · Fortaleza, CE</div></div></div>
+      </div>
+      <div class="testi">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Como personal trainer, recomendo o AMOFIT para meus alunos iniciantes. Os protocolos têm qualidade técnica impressionante."</p>
+        <div class="testi-author"><div class="testi-avatar">RL</div><div><div class="testi-name">Rafael L.</div><div class="testi-meta">Plano Elite · São Paulo, SP</div></div></div>
+      </div>
+      <div class="testi">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"A parte de nutrição é incrível. Receitas práticas, lista de compras automática e se adequou à minha intolerância à lactose."</p>
+        <div class="testi-author"><div class="testi-avatar">JP</div><div><div class="testi-name">Juliana P.</div><div class="testi-meta">Plano Pro · Recife, PE</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="cta-band fade-in">
+  <h2>SEU MELHOR CORPO<br>COMEÇA HOJE</h2>
+  <p>Mais de 4.800 pessoas já estão seguindo seus protocolos inteligentes. A sua vez é agora.</p>
+  <button class="btn-primary" onclick="document.getElementById('planos').scrollIntoView({behavior:'smooth'})">Criar meu protocolo grátis →</button>
+</section>
+
+<!-- FAQ -->
+<section>
+  <div class="container">
+    <div class="fade-in" style="text-align:center">
+      <div class="section-tag">Dúvidas</div>
+      <h2 class="section-title">Perguntas frequentes</h2>
+    </div>
+    <div class="faq-list fade-in">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Preciso de equipamentos para usar os protocolos? <span class="faq-arrow">▾</span></button>
+        <div class="faq-a">Não necessariamente. Você pode informar se tem acesso a academia, treina em casa ou ao ar livre. A IA adapta todos os exercícios ao seu contexto e equipamentos disponíveis.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Com que frequência o protocolo é atualizado? <span class="faq-arrow">▾</span></button>
+        <div class="faq-a">No plano Pro e Elite, o protocolo é revisto a cada 4 semanas automaticamente, com base no seu progresso registrado. Você também pode solicitar ajustes a qualquer momento pelo chat com a IA.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">A IA substitui um nutricionista ou personal trainer? <span class="faq-arrow">▾</span></button>
+        <div class="faq-a">O AMOFIT é uma ferramenta de suporte baseada em IA e não substitui acompanhamento clínico. Para condições de saúde específicas, recomendamos consultar profissionais habilitados. Para pessoas saudáveis buscando melhora estética e performance, nossa IA oferece resultados excelentes.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Posso cancelar quando quiser? <span class="faq-arrow">▾</span></button>
+        <div class="faq-a">Sim, você pode cancelar a qualquer momento sem multa nem burocracia. Seu acesso continua até o fim do período pago. Também oferecemos garantia de 21 dias com reembolso total se não ver resultados.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">Os protocolos funcionam para quem está começando? <span class="faq-arrow">▾</span></button>
+        <div class="faq-a">Absolutamente! A IA é especialmente eficaz para iniciantes porque cria uma progressão segura, didática e adaptada ao seu ritmo. Você não precisa de nenhum conhecimento prévio.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">AMOFIT</div>
+  <p style="margin-bottom:0.5rem">Protocolos Inteligentes de Treino e Nutrição</p>
+  <p>© 2025 AMOFIT · Todos os direitos reservados</p>
+</footer>
+
+<script>
+function toggleFaq(btn){
+  const item=btn.closest('.faq-item');
+  item.classList.toggle('open');
+}
+
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible')}});
+},{threshold:0.1});
+document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
